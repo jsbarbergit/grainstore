@@ -68,3 +68,55 @@ resource "aws_iam_role_policy_attachment" "cognito_login_policy_attachment" {
   policy_arn = aws_iam_policy.cognito_login_policy.arn
   role       = aws_iam_role.cognito_login_role.name
 }
+
+# IAM Role for Add Record Function
+resource "aws_iam_policy" "grainstore_add_record_policy" {
+  name = "GrainstoreAddRecordLambdaPolicy"
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:PutLogEvents",
+                "logs:CreateLogStream",
+                "logs:DescribeLogStreams"
+            ],
+            "Resource": [
+                "arn:aws:logs:*:*:*"
+            ],
+            "Effect": "Allow"
+        }
+    ]
+}
+POLICY
+}
+
+resource "aws_iam_role" "grainstore_add_record_role" {
+  name = "GrainstoreAddRecordRole"
+
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": [
+          "lambda.amazonaws.com",
+          "edgelambda.amazonaws.com"
+        ]
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "grainstore_add_record_policy_attachment" {
+  policy_arn = aws_iam_policy.grainstore_add_record_policy.arn
+  role       = aws_iam_role.grainstore_add_record_role.name
+}

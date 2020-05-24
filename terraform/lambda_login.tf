@@ -135,7 +135,7 @@ module "cognito_login" {
   function_name          = "CognitoLogin"
   role_arn               = aws_iam_role.cognito_login_role.arn
   handler                = "index.lambda_handler"
-  runtime                = "python3.6"
+  runtime                = "python3.8"
   publish                = true
   description            = "Cognito Login Function"
 }
