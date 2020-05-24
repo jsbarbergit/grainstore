@@ -25,8 +25,7 @@ module "grainstore_add_record" {
   source                 = "./modules/lambda"
   template_file_rendered = data.template_file.grainstore_add_record.rendered
   function_name          = "GrainstoreAddRecord"
-  # TODO Create own IAM Role when reqs known
-  role_arn    = aws_iam_role.cognito_login_role.arn
+  role_arn    = aws_iam_role.grainstore_add_record_role.arn
   handler     = "index.lambda_handler"
   runtime     = "python3.8"
   publish     = true
