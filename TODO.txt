@@ -1,0 +1,11 @@
+TODO
+- fixup lambda repeat code for password change func
+- add env suffix to enable diff env building
+- add Makefile
+- s3 bucket tf code
+- dynamodb table tf code
+- S3 presigned URL function for s3 image upload
+    https://boto3.amazonaws.com/v1/documentation/api/latest/guide/s3-presigned-urls.html
+- extend addrecord function to actually add the record
+- tests
+- s3 hosted spa for querying dynamodb
