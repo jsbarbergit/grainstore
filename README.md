@@ -1,6 +1,6 @@
 # Grainstore
 
-Infrastructure repo for Grainstore AWS Components:
+AWS Serverless Infrastructure repo for Grainstore Application Components:
 
 * API Gateway
     * /login
@@ -10,12 +10,34 @@ Infrastructure repo for Grainstore AWS Components:
     * Generate S3 Pre-Signed URL Function
     * Add Record Function
 * Cognito
+    * User pool
+    * App Client
 * S3
+    * Terraform remote state bucket
+    * Grainstore image data bucket
 * DynamoDB
+    * Terraform remote state lock table
+    * Grainstore data store
+
+## Prerequisites
+
+* `make`
+* `terraform` (>= v0.12.12)
+
+## Architecture
+
+<details><summary>Click to expand</summary>
+<p>
+
+![Architecture Diagram](./diagrams/architecture.png)
+
+</p>
+</details>
+
 
 ## Build
 
-All Infra is built using Terraform: `terraform apply`
+All Infra is built using Terraform, e.g.: `make all-dev` will build and deploy a full development environment
 
 ## Sequence Diagram
 
