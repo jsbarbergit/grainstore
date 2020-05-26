@@ -29,3 +29,8 @@ variable "publish" {
 variable "description" {
   type = string
 }
+
+variable "log_retention_days" {
+  default  = "7"
+  description = "No. of days to keep lambda cloudwatch log messages"
+}

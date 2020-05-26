@@ -12,10 +12,21 @@ resource "aws_s3_bucket" "state_s3_bucket" {
 
   acl = "private"
 
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm     = "AES256"
+      }
+    }
+  }
+
   tags = {
     name        = "grainstore-tfstate"
     environment = "build"
   }
+
+  # Ignore logging warning from tfsec scan for this bucket
+  #tfsec:ignore:AWS002
 }
 
 resource "aws_dynamodb_table" "product_dynamodb_table" {

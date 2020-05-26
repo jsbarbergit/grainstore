@@ -24,17 +24,6 @@ The following python (v3.8) example highlights how a new record could be added w
 #!/usr/bin/env python3
 import requests
 import json
-
-endpoint = 'https://<poolid>.execute-api.<region>.amazonaws.com/<api_stage>'
-body = {
-    "username": "<cognito_username>",
-    "password": "<cognito_password>",
-    "poolid": "<cognito_poolid>",
-    "clientid": "<cognito_appclient_id>",
-    "clientsecret": "<cognito_appclient_secret>"
-}
-import requests
-import json
 from jose import jwt
 from datetime import datetime, timedelta
 
@@ -86,16 +75,42 @@ def tokenvalid(token, region, poolid, clientid):
 
 def addrecord(endpoint, token, newrecord):
     # Now call authenticated endpoint
-    y_headers = {
+    headers = {
         'Authorization': token,
         'Content-Type': 'application/json'
     }
-    y = requests.post(endpoint + '/addrecord', headers=y_headers, json = newrecord)
-    print('AddRecord StatusCode: ' + str(y.status_code))
-    print('AddRecord Response Body :' + y.text)
-    if y.status_code != 200:
-        print('ERROR received from api. StatusCode: ' + str(y.status_code))
+    response = requests.post(endpoint + '/addrecord', headers=headers, json = newrecord)
+    print('AddRecord StatusCode: ' + str(response.status_code))
+    print('AddRecord Response Body :' + response.text)
+    if response.status_code != 200:
+        print('ERROR received from api. StatusCode: ' + str(response.status_code))
         return False
+    return True
+
+def getsignedurl(endpoint, token, customerdetails):
+    # Now call authenticated endpoint
+    headers = {
+        'Authorization': token,
+        'Content-Type': 'application/json'
+    }
+    signedurl = requests.post(endpoint + '/signedurl', headers=headers, json = customerdetails)
+    if signedurl.status_code != 200:
+        print('ERROR getting signed url. StatusCode: ' + str(signedurl.status_code))
+        return None
+    return signedurl.text
+
+def postimage(url, fields, file, uuid):
+    # Open the image file in  readonly binary mode
+    with open(file, 'rb') as f:
+        files = {'file': (uuid, f)}
+        fields['acl'] = 'private',
+        http_response = requests.post(url, data=fields, files=files)
+    if http_response.status_code != 204:
+        # If successful, returns HTTP status code 204
+        print('ERROR: File upload HTTP status code: ' + str(http_response.status_code))
+        print('ERROR: Response data: ' + http_response.text)
+        return False
+    print('Upload via presigned url success. StatusCode: ' + str(http_response.status_code))
     return True
 
 def main():
@@ -106,6 +121,7 @@ def main():
     clientid = "<cognito_appclient_id>"
     secret = "<cognito_appclient_secret>"
     apiendpoint = "https://<api_id>.execute-api.<aws_region>.amazonaws.com/<api_stage>"
+    customerid = "<customer_id"
 
     # Login via cognito and retrieve access token
     token = login(apiendpoint, username, password, poolid, clientid, secret)
@@ -124,10 +140,30 @@ def main():
             print('ERROR - Cannot proceed without valid access token')
             return
 
+    # Get presigned url for image uploads and a uuid to tie image and data together
+    customerdata = {
+        "customerid": customerid
+    }
+    signedurl_response = getsignedurl(apiendpoint, token, customerdata)
+    if signedurl_response == None:
+        print('ERROR - Failed to fetch signed URL')
+        return
+    signedurl = json.loads(signedurl_response)
+    url = signedurl['url']
+    fields = signedurl['fields']
+    uuid = signedurl['uuid']
+
+    # POST a test image file to S3 using presigned url
+    testfile = 'test_image.png'
+    upload_result = postimage(url, fields, testfile, uuid)
+    if not upload_result:
+        print("Error uploading image. Aborting'")
+        return
+
     # Call authenticated addnewrecord api 
     newrecord = {
         "weight": 100,
-        "customerid": "abc123"
+        "customerid": customerid
     }
     result = addrecord(apiendpoint, token, newrecord)
     if not result:
@@ -138,4 +174,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 ```
