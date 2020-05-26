@@ -7,6 +7,7 @@ Infrastructure repo for Grainstore AWS Components:
     * /addrecord
 * Lambda
     * Login Function
+    * Generate S3 PerSigned URL Function
     * Add Record Function
 * Cognito
 * S3
@@ -20,7 +21,9 @@ All Infra is built using Terraform: `terraform apply`
 
 <details><summary>Click to expand</summary>
 <p>
+
 ![Sequence Diagram](./diagrams/sequence.png)
+
 </p>
 </details>
 
@@ -30,7 +33,9 @@ The following python (v3.8) example highlights how a new record could be added w
 
 <details><summary>Show Example Code</summary>
 <p>
+
 ```
+
 #!/usr/bin/env python3
 import requests
 import json
@@ -191,5 +196,6 @@ if __name__ == "__main__":
     main()
 
 ```
+
 </p>
 </details>
