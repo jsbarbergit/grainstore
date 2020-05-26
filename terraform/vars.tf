@@ -8,6 +8,12 @@ variable "cibuild_assumerole" {
   default     = "arn:aws:iam::146964078495:role/TerraformBuildRole"
 }
 
+# Environment var
+variable "environment" {
+  default = ""
+  description = "Environment name - will be used as a prefix for all resources. Must be passed at build time"
+}
+
 # User Pool Vars
 variable "schema_attribute_data_type" {
   default = "String"
@@ -39,4 +45,10 @@ variable "unused_account_expiry_days" {
 variable "auto_verified_attributes" {
   type    = list(string)
   default = ["email"]
+}
+
+# Cloudwatch log vars
+variable "log_retention_days" {
+  default = "7"
+  description = "Days to keep CW Log data for Lambda functions"
 }

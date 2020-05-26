@@ -4,12 +4,14 @@ module "grainstore_add_record" {
   template_file_rendered = templatefile("${path.module}/functions/addrecord.py.tpl", {
     aws_region = var.aws_region
   })
-  function_name = "GrainstoreAddRecord"
+  function_name = "GrainstoreAddRecord-${var.environment}"
   role_arn      = aws_iam_role.grainstore_add_record_role.arn
   handler       = "index.lambda_handler"
   runtime       = "python3.8"
   publish       = true
-  description   = "Grainstore Add Record Function"
+  description   = "Grainstore Add Record Function ${var.environment}"
+  log_retention_days = var.log_retention_days
+  environment = var.environment
 }
 
 resource "aws_lambda_permission" "grainstore_add_record_permission" {

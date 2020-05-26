@@ -26,15 +26,19 @@ scan: ## Scan Terrform in terraform/ dir for security issues
 	$
 	$(MAKE) -C $(TFDIR) scan
 
-.PHONY: plan
-plan: ## Scan Terrform in terraform/ dir for security issues
+.PHONY: plan-dev 
+plan-dev: ## Create a  Terrform Plan for the DEV environment
 	$
-	$(MAKE) -C $(TFDIR) plan
+	$(MAKE) -C $(TFDIR) plan-dev
 
-.PHONY: auto-apply
-auto-apply: ## Apply terraform changes without prompting
-	$(MAKE) -C $(TFDIR) auto-apply
+.PHONY: apply-dev
+apply-dev: ## Apply terraform changes to DEV environment without prompting
+	$(MAKE) -C $(TFDIR) apply-dev
 
-.PHONY: all
-all: ## Run full terraform setup
-	$(MAKE) -C $(TFDIR) all
+.PHONY: auto-apply-dev
+auto-apply-dev: ## Apply terraform changes to DEV environment with confirmation prompts
+	$(MAKE) -C $(TFDIR) auto-apply-dev
+
+.PHONY: all-dev 
+all-dev: ## Run full terraform setup for DEV environment
+	$(MAKE) -C $(TFDIR) all-dev

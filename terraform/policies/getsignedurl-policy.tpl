@@ -14,7 +14,7 @@
                 "logs:DescribeLogStreams"
             ],
             "Resource": [
-                "arn:aws:logs:${aws_region}:${account_id}:log-group:/aws/lambda/GrainstoreSignedUrl"
+                "arn:aws:logs:${aws_region}:${account_id}:log-group:/aws/lambda/GrainstoreSignedUrl-${environment}"
             ],
             "Effect": "Allow"
         },
@@ -39,8 +39,8 @@
                 "s3:PutObjectAcl"
             ],
             "Resource": [
-                "arn:aws:s3:::grainstore-bucket",
-                "arn:aws:s3:::grainstore-bucket/*"
+                "arn:aws:s3:::grainstore-bucket-${environment}",
+                "arn:aws:s3:::grainstore-bucket-${environment}/*"
             ]
         }
     ]

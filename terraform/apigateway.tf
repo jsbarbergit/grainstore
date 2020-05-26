@@ -1,5 +1,5 @@
 resource "aws_apigatewayv2_api" "api_gw" {
-  name          = "grainstore-api"
+  name          = "grainstore-api-${var.environment}"
   protocol_type = "HTTP"
 }
 
@@ -8,7 +8,7 @@ resource "aws_apigatewayv2_authorizer" "cognito_authorizer" {
   api_id           = aws_apigatewayv2_api.api_gw.id
   authorizer_type  = "JWT"
   identity_sources = ["$request.header.Authorization"]
-  name             = "GrainstoreCognitoAuthorizer"
+  name             = "GrainstoreCognitoAuthorizer-${var.environment}"
 
   jwt_configuration {
     audience = [aws_cognito_user_pool_client.client.id]
@@ -21,7 +21,7 @@ resource "aws_apigatewayv2_integration" "login_lambda_integration" {
   api_id                 = aws_apigatewayv2_api.api_gw.id
   integration_type       = "AWS_PROXY"
   connection_type        = "INTERNET"
-  description            = "Cognito Login Lambda"
+  description            = "${var.environment} Cognito Login Lambda"
   integration_method     = "POST"
   integration_uri        = module.cognito_login.invoke_arn
   payload_format_version = "2.0"
@@ -31,7 +31,7 @@ resource "aws_apigatewayv2_integration" "add_record_lambda_integration" {
   api_id                 = aws_apigatewayv2_api.api_gw.id
   integration_type       = "AWS_PROXY"
   connection_type        = "INTERNET"
-  description            = "Grainstore Add Record Lambda"
+  description            = "${var.environment} Grainstore Add Record Lambda"
   integration_method     = "POST"
   integration_uri        = module.grainstore_add_record.invoke_arn
   payload_format_version = "2.0"
@@ -41,7 +41,7 @@ resource "aws_apigatewayv2_integration" "signed_url_lambda_integration" {
   api_id                 = aws_apigatewayv2_api.api_gw.id
   integration_type       = "AWS_PROXY"
   connection_type        = "INTERNET"
-  description            = "Grainstore Presigned URL Lambda"
+  description            = "${var.environment} Grainstore Presigned URL Lambda"
   integration_method     = "POST"
   integration_uri        = module.grainstore_signed_url.invoke_arn
   payload_format_version = "2.0"
@@ -72,9 +72,9 @@ resource "aws_apigatewayv2_route" "signed_url_route" {
 }
 
 # Stages
-resource "aws_apigatewayv2_stage" "api_gw_dev_stage" {
+resource "aws_apigatewayv2_stage" "api_gw_stage" {
   api_id      = aws_apigatewayv2_api.api_gw.id
-  name        = "dev"
+  name        = var.environment
   auto_deploy = true
   # Temp workaround for open issue: https://github.com/terraform-providers/terraform-provider-aws/issues/12893
   lifecycle {

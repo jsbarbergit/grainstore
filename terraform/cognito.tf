@@ -1,5 +1,5 @@
 resource "aws_cognito_user_pool" "pool" {
-  name = "grainstore"
+  name = "grainstore-${var.environment}"
 
   schema {
     attribute_data_type = var.schema_attribute_data_type
@@ -24,7 +24,7 @@ resource "aws_cognito_user_pool" "pool" {
   }
 
   verification_message_template {
-    email_subject = "Grainstore Access"
+    email_subject = "Grainstore Access (${var.environment})"
     email_message = "Your Grainstore username is {username} and password is {####}"
   }
 
@@ -32,7 +32,7 @@ resource "aws_cognito_user_pool" "pool" {
 }
 
 resource "aws_cognito_user_pool_client" "client" {
-  name                = "grainstore_client"
+  name                = "grainstore_client_${var.environment}"
   user_pool_id        = aws_cognito_user_pool.pool.id
   generate_secret     = true
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH"]

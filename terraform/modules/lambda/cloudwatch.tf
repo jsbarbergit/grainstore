@@ -4,5 +4,6 @@ resource "aws_cloudwatch_log_group" "log_group" {
   retention_in_days = var.log_retention_days
   tags = {
     Application = "grainstore"
+    Environment = var.environment
   }
 }

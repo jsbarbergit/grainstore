@@ -1,6 +1,4 @@
 TODO
-- add env suffix to enable diff env building
-- add Makefile
 - dynamodb table tf code
 - extend addrecord function to actually add the record
 - tests

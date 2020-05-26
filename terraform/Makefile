@@ -17,17 +17,21 @@ scan:
 	$(MAKE) docker-login
 	docker run --rm -it -v "$(pwd):/workdir" wesleydeanflexion/tfsec .
 
-.PHONY: plan
-plan:
-	$(MAKE) validate && $(MAKE) scan && $(TF) plan
+.PHONY: plan-dev
+plan-dev:
+	$(TF) workspace select dev && $(MAKE) validate && $(MAKE) scan && $(TF) plan -var-file=tfvars/dev/vars.tfvars
 
-.PHONY: auto-apply
-auto-apply:
-	$(MAKE) scan && $(TF) apply --auto-approve
+.PHONY: apply-dev
+apply-dev:
+	$(TF) workspace select dev && $(MAKE) scan && $(TF) apply -var-file=tfvars/dev/vars.tfvars
 
-.PHONY: all
-all:
-	$(MAKE) validate && $(MAKE) auto-apply
+.PHONY: auto-apply-dev
+auto-apply-dev:
+	$(TF) workspace select dev && $(MAKE) scan && $(TF) apply --auto-approve -var-file=tfvars/dev/vars.tfvars
+
+.PHONY: all-dev
+all-dev:
+	$(TF) workspace select dev && $(MAKE) validate && $(MAKE) auto-apply-dev
 
 .PHONY: docker-login
 docker-login:

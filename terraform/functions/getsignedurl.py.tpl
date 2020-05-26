@@ -61,7 +61,7 @@ def return_failure(msg, code):
   }
 
 def lambda_handler(event, context):
-  bucket = "grainstore-bucket"
+  bucket = "${bucket_name}"
   # event obj is a dict, but json body comes through as a string - convert to json if so
   body = event.get('body')
   if isinstance(body, str):

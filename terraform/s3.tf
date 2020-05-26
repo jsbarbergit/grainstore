@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "grainstore_bucket" {
-  bucket = "grainstore-bucket"
+  bucket = "grainstore-bucket-${var.environment}"
   acl    = "private"
 
   versioning {
@@ -16,8 +16,8 @@ resource "aws_s3_bucket" "grainstore_bucket" {
   }
 
   tags = {
-    name        = "grainstore-data"
-    environment = "dev"
+    Name        = "grainstore-data-${var.environment}"
+    Environment = "${var.environment}"
   }
 
   # Ignore logging warning from tfsec scan for this bucket
