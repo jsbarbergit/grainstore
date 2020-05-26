@@ -7,7 +7,7 @@ Infrastructure repo for Grainstore AWS Components:
     * /addrecord
 * Lambda
     * Login Function
-    * Generate S3 PerSigned URL Function
+    * Generate S3 Pre-Signed URL Function
     * Add Record Function
 * Cognito
 * S3
