@@ -31,6 +31,6 @@ variable "description" {
 }
 
 variable "log_retention_days" {
-  default  = "7"
+  default     = "7"
   description = "No. of days to keep lambda cloudwatch log messages"
 }

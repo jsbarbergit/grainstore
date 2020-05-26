@@ -52,6 +52,7 @@ resource "aws_apigatewayv2_route" "login_route" {
   api_id    = aws_apigatewayv2_api.api_gw.id
   route_key = "POST /login"
   target    = join("/", ["integrations", aws_apigatewayv2_integration.login_lambda_integration.id])
+
 }
 
 resource "aws_apigatewayv2_route" "add_record_route" {

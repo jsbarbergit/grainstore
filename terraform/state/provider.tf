@@ -7,7 +7,7 @@ provider "aws" {
   version = "~> 2.63"
 
   assume_role {
-    role_arn = var.cibuild_assumerole
+    role_arn     = var.cibuild_assumerole
     session_name = "TerraformBuild"
   }
 }
