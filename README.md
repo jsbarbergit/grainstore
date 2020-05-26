@@ -16,10 +16,20 @@ Infrastructure repo for Grainstore AWS Components:
 
 All Infra is built using Terraform: `terraform apply`
 
+## Sequence Diagram
+
+<details><summary>Click to expand</summary>
+<p>
+![Sequence Diagram](./diagrams/sequence.png)
+</p>
+</details>
+
 ## Example Usage
 
 The following python (v3.8) example highlights how a new record could be added with cognito JWT based auth:
 
+<details><summary>Show Example Code</summary>
+<p>
 ```
 #!/usr/bin/env python3
 import requests
@@ -181,3 +191,5 @@ if __name__ == "__main__":
     main()
 
 ```
+</p>
+</details>
