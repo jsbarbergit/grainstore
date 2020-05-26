@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "grainstore_bucket" {
-  bucket = "grainstore-bucket-${var.environment}"
+  bucket = local.bucket_name
   acl    = "private"
 
   versioning {

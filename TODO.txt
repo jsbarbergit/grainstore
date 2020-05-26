@@ -1,5 +1,4 @@
 TODO
-- dynamodb table tf code
-- extend addrecord function to actually add the record
+- try/catch in lambda funcs
 - tests
 - s3 hosted spa for querying dynamodb

@@ -5,8 +5,8 @@ resource "aws_iam_policy" "cognito_login_policy" {
   name = "CognitoLambdaPolicy-${var.environment}"
 
   policy = templatefile("${path.module}/policies/cognito-login-policy.tpl", {
-    aws_region = var.aws_region,
-    account_id = data.aws_caller_identity.current.account_id,
+    aws_region  = var.aws_region,
+    account_id  = data.aws_caller_identity.current.account_id,
     environment = var.environment
   })
 }
@@ -26,9 +26,10 @@ resource "aws_iam_policy" "grainstore_add_record_policy" {
   name = "GrainstoreAddRecordLambdaPolicy-${var.environment}"
 
   policy = templatefile("${path.module}/policies/addrecord-policy.tpl", {
-    aws_region = var.aws_region,
-    account_id = data.aws_caller_identity.current.account_id,
-    environment = var.environment
+    aws_region  = var.aws_region,
+    account_id  = data.aws_caller_identity.current.account_id,
+    environment = var.environment,
+    dynamo_arn = aws_dynamodb_table.grainstore_table.arn
   })
 }
 
@@ -47,8 +48,8 @@ resource "aws_iam_role_policy_attachment" "grainstore_add_record_policy_attachme
 resource "aws_iam_policy" "grainstore_signed_url_policy" {
   name = "GrainstoreSignedUrlLambdaPolicy-${var.environment}"
   policy = templatefile("${path.module}/policies/getsignedurl-policy.tpl", {
-    aws_region = var.aws_region,
-    account_id = data.aws_caller_identity.current.account_id,
+    aws_region  = var.aws_region,
+    account_id  = data.aws_caller_identity.current.account_id,
     environment = var.environment
   })
 }

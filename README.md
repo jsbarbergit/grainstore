@@ -161,15 +161,20 @@ def main():
         return
 
     # Call authenticated addnewrecord api 
+     # Call authenticated addnewrecord api 
     newrecord = {
-        "weight": 100,
-        "customerid": customerid
+        "UUID": uuid,
+        "CustomerId": customerid,
+        "Weight": 23.11,
+        "Value": 12.22,
+        "ImageBucket": url,
+        "ImageKey": fields['key']
     }
     result = addrecord(apiendpoint, token, newrecord)
     if not result:
         print('ERROR - Failed to add new record')
         return
-    print('New Record Added')
+    print('New Record Added with UUID: ' + uuid)
     return
 
 if __name__ == "__main__":

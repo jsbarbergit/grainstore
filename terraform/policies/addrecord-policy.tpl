@@ -12,6 +12,18 @@
                 "arn:aws:logs:${aws_region}:${account_id}:*"
             ],
             "Effect": "Allow"
+        },
+        {
+            "Sid": "DynamoDBWritePermissions",
+            "Action": [
+                "dynamodb:BatchWriteItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem"
+            ],
+            "Resource": [
+                "${dynamo_arn}"
+            ],
+            "Effect": "Allow"
         }
     ]
 }

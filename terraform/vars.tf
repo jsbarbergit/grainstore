@@ -10,7 +10,7 @@ variable "cibuild_assumerole" {
 
 # Environment var
 variable "environment" {
-  default = ""
+  default     = ""
   description = "Environment name - will be used as a prefix for all resources. Must be passed at build time"
 }
 
@@ -49,6 +49,20 @@ variable "auto_verified_attributes" {
 
 # Cloudwatch log vars
 variable "log_retention_days" {
-  default = "7"
+  default     = "7"
   description = "Days to keep CW Log data for Lambda functions"
+}
+
+# DynamoDB Vars
+variable "grainstore_data_partition_key_name" {
+  default = "UUID"
+}
+variable "grainstore_data_sort_key_name" {
+  default = "CustomerId"
+}
+
+variable "dynamo_pitr" {
+  default     = true
+  type        = bool
+  description = "Enable PITR for grainstore dynamodb data table"
 }
