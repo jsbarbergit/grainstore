@@ -4,6 +4,7 @@ AWS Serverless Infrastructure repo for Grainstore Application Components:
 
 * API Gateway
     * /login
+    * /signedurl
     * /addrecord
 * Lambda
     * Login Function
