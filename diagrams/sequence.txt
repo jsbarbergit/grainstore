@@ -17,7 +17,7 @@ participant ImageStore
 participant Database
 end
 
-Farmer->PythonApp: Take Readin
+Farmer->PythonApp: Take Reading
 
 alt Farmer not logged in
 PythonApp->Auth: Send Credentials
