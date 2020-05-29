@@ -3,17 +3,18 @@ resource "aws_dynamodb_table" "grainstore_table" {
   billing_mode   = "PROVISIONED"
   read_capacity  = 1
   write_capacity = 1
-  hash_key       = "UUID"
-  range_key      = "CustomerId"
+  hash_key       = "CustomerId"
+  range_key      = "UUID"
 
-  # TBC Grainstore Customer ID - assumes shared table for now - may well be table per customer eventually 
-  attribute {
-    name = "UUID"
-    type = "S"
-  }
   # TBC Name of client buying/selling the grain
   attribute {
     name = "CustomerId"
+    type = "S"
+  }
+  
+  # TBC Grainstore Customer ID - assumes shared table for now - may well be table per customer eventually 
+  attribute {
+    name = "UUID"
     type = "S"
   }
 

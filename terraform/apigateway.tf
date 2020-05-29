@@ -27,6 +27,16 @@ resource "aws_apigatewayv2_integration" "login_lambda_integration" {
   payload_format_version = "2.0"
 }
 
+resource "aws_apigatewayv2_integration" "signed_url_lambda_integration" {
+  api_id                 = aws_apigatewayv2_api.api_gw.id
+  integration_type       = "AWS_PROXY"
+  connection_type        = "INTERNET"
+  description            = "${var.environment} Grainstore Presigned URL Lambda"
+  integration_method     = "POST"
+  integration_uri        = module.grainstore_signed_url.invoke_arn
+  payload_format_version = "2.0"
+}
+
 resource "aws_apigatewayv2_integration" "add_record_lambda_integration" {
   api_id                 = aws_apigatewayv2_api.api_gw.id
   integration_type       = "AWS_PROXY"
@@ -37,13 +47,13 @@ resource "aws_apigatewayv2_integration" "add_record_lambda_integration" {
   payload_format_version = "2.0"
 }
 
-resource "aws_apigatewayv2_integration" "signed_url_lambda_integration" {
+resource "aws_apigatewayv2_integration" "get_record_lambda_integration" {
   api_id                 = aws_apigatewayv2_api.api_gw.id
   integration_type       = "AWS_PROXY"
   connection_type        = "INTERNET"
-  description            = "${var.environment} Grainstore Presigned URL Lambda"
+  description            = "${var.environment} Grainstore Get Record Lambda"
   integration_method     = "POST"
-  integration_uri        = module.grainstore_signed_url.invoke_arn
+  integration_uri        = module.grainstore_get_record.invoke_arn
   payload_format_version = "2.0"
 }
 
@@ -55,6 +65,14 @@ resource "aws_apigatewayv2_route" "login_route" {
 
 }
 
+resource "aws_apigatewayv2_route" "signed_url_route" {
+  api_id             = aws_apigatewayv2_api.api_gw.id
+  route_key          = "POST /signedurl"
+  target             = join("/", ["integrations", aws_apigatewayv2_integration.signed_url_lambda_integration.id])
+  authorization_type = "JWT"
+  authorizer_id      = aws_apigatewayv2_authorizer.cognito_authorizer.id
+}
+
 resource "aws_apigatewayv2_route" "add_record_route" {
   api_id             = aws_apigatewayv2_api.api_gw.id
   route_key          = "POST /addrecord"
@@ -63,10 +81,10 @@ resource "aws_apigatewayv2_route" "add_record_route" {
   authorizer_id      = aws_apigatewayv2_authorizer.cognito_authorizer.id
 }
 
-resource "aws_apigatewayv2_route" "signed_url_route" {
+resource "aws_apigatewayv2_route" "get_record_route" {
   api_id             = aws_apigatewayv2_api.api_gw.id
-  route_key          = "POST /signedurl"
-  target             = join("/", ["integrations", aws_apigatewayv2_integration.signed_url_lambda_integration.id])
+  route_key          = "POST /getrecord"
+  target             = join("/", ["integrations", aws_apigatewayv2_integration.get_record_lambda_integration.id])
   authorization_type = "JWT"
   authorizer_id      = aws_apigatewayv2_authorizer.cognito_authorizer.id
 }
