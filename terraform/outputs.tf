@@ -14,3 +14,7 @@ output "Cognito_Pool_ID" {
 output "Cognito_App_ID" {
   value = aws_cognito_user_pool_client.client.id
 }
+
+output "Cognito_App_UI_ID" {
+  value = aws_cognito_user_pool_client.ui_client.id
+}

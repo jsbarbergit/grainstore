@@ -11,12 +11,15 @@ import { Auth } from "aws-amplify";
 
 
 function App() {
+
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [isAuthenticating, setIsAuthenticating] = useState(true);
+
   useEffect(() => {
     onLoad();
   }, []);
   const history = useHistory();
+  const [customerId, setCustomerId ] = useState("");
 
   async function onLoad() {
     try {
@@ -34,9 +37,16 @@ function App() {
 
   async function handleLogout() {
     await Auth.signOut();
-    alert('You have been logged out')
     userHasAuthenticated(false);
     history.push("/login");
+  }
+
+  const searchChange = ({target}) => {
+    setCustomerId(target.value);
+  }
+
+  const doSearch = () => {
+    history.push('/results/' + customerId)
   }
 
   return (
@@ -44,7 +54,7 @@ function App() {
     <div className="App container">
       <Navbar collapseOnSelect>
         <Navbar.Brand>
-          <Link to="/">Grainstore UI</Link>
+          <h1><Link to="/">Grainstore UI</Link></h1>
         </Navbar.Brand>
         <Navbar.Toggle />
         <Navbar.Collapse>
@@ -59,6 +69,25 @@ function App() {
             }
           </Nav>
         </Navbar.Collapse>
+        <Nav>
+          {isAuthenticated
+            ? <NavItem>
+              <form className="form-inline" onSubmit={doSearch}>
+                <input  className="form-control mr-sm-2" 
+                        type="search" 
+                        placeholder="Enter CustomerId" 
+                        aria-label="Enter CustomerId"
+                        value={customerId}
+                        onChange={searchChange}
+                        >
+                </input>
+                <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              </form>
+            </NavItem>
+            : <>
+              </>
+          }
+        </Nav>
       </Navbar>
       <AppContext.Provider
         value={{ isAuthenticated, userHasAuthenticated }}

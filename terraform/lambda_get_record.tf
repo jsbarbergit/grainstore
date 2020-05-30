@@ -2,7 +2,7 @@ module "grainstore_get_record" {
   filename = "index.py"
   source   = "./modules/lambda"
   template_file_rendered = templatefile("${path.module}/functions/getrecord.py.tpl", {
-    aws_region = var.aws_region,
+    aws_region                 = var.aws_region,
     grainstore_data_table_name = local.table_name,
   })
   function_name      = "GrainstoreGetRecord-${var.environment}"

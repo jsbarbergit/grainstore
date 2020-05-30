@@ -11,7 +11,7 @@ resource "aws_dynamodb_table" "grainstore_table" {
     name = "CustomerId"
     type = "S"
   }
-  
+
   # TBC Grainstore Customer ID - assumes shared table for now - may well be table per customer eventually 
   attribute {
     name = "UUID"

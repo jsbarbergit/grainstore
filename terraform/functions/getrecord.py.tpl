@@ -34,7 +34,6 @@ def get_item(pkeyvalue):
 
 def return_success(response):
   print("Sending success event")
-  print(type(response))
   return {
     "isBase64Encoded": False,
     "headers": {
@@ -83,4 +82,5 @@ def lambda_handler(event, context):
     "Count": json.loads(result)['Count'],
     "Items": json.loads(result)['Items']
   }
+  print('Records Found: ' + str(json.loads(result)['Count']))
   return return_success(msg)

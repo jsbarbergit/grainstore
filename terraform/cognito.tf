@@ -39,9 +39,9 @@ resource "aws_cognito_user_pool_client" "client" {
 }
 
 resource "aws_cognito_user_pool_client" "ui_client" {
-  name                = "grainstore_ui_${var.environment}"
-  user_pool_id        = aws_cognito_user_pool.pool.id
-  generate_secret     = false
-  explicit_auth_flows = ["USER_PASSWORD_AUTH"]
+  name                          = "grainstore_ui_${var.environment}"
+  user_pool_id                  = aws_cognito_user_pool.pool.id
+  generate_secret               = false
+  explicit_auth_flows           = ["USER_PASSWORD_AUTH"]
   prevent_user_existence_errors = "ENABLED"
 }

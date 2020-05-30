@@ -50,7 +50,7 @@ resource "aws_iam_policy" "grainstore_add_record_policy" {
     aws_region  = var.aws_region,
     account_id  = data.aws_caller_identity.current.account_id,
     environment = var.environment,
-    dynamo_arn = aws_dynamodb_table.grainstore_table.arn
+    dynamo_arn  = aws_dynamodb_table.grainstore_table.arn
   })
 }
 
@@ -73,7 +73,7 @@ resource "aws_iam_policy" "grainstore_get_record_policy" {
     aws_region  = var.aws_region,
     account_id  = data.aws_caller_identity.current.account_id,
     environment = var.environment,
-    dynamo_arn = aws_dynamodb_table.grainstore_table.arn
+    dynamo_arn  = aws_dynamodb_table.grainstore_table.arn
   })
 }
 
@@ -86,4 +86,28 @@ resource "aws_iam_role" "grainstore_get_record_role" {
 resource "aws_iam_role_policy_attachment" "grainstore_get_record_policy_attachment" {
   policy_arn = aws_iam_policy.grainstore_get_record_policy.arn
   role       = aws_iam_role.grainstore_get_record_role.name
+}
+
+# IAM Role for Publish Image Function
+resource "aws_iam_policy" "grainstore_publish_image_policy" {
+  name = "GrainstorePublishImageLambdaPolicy-${var.environment}"
+
+  policy = templatefile("${path.module}/policies/publishimage-policy.tpl", {
+    aws_region         = var.aws_region,
+    account_id         = data.aws_caller_identity.current.account_id,
+    environment        = var.environment,
+    bucket_name        = local.bucket_name,
+    public_bucket_name = local.public_bucket_name
+  })
+}
+
+resource "aws_iam_role" "grainstore_publish_image_role" {
+  name = "GrainstorePublishImageRole-${var.environment}"
+
+  assume_role_policy = templatefile("${path.module}/policies/lambda-assumerole-policy.tpl", {})
+}
+
+resource "aws_iam_role_policy_attachment" "grainstore_publish_image_policy_attachment" {
+  policy_arn = aws_iam_policy.grainstore_publish_image_policy.arn
+  role       = aws_iam_role.grainstore_publish_image_role.name
 }

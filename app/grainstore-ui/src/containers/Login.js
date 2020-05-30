@@ -20,7 +20,6 @@ export default function Login() {
   
     try {
       await Auth.signIn(username, password);
-      alert("Logged in");
       userHasAuthenticated(true);
     //   Redirect to  home page on login
       history.push("/");
