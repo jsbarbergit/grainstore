@@ -1,2 +1,5 @@
 .terraform/
 terraform.tfstate.backup
+.vscode
+node_modules/
+config.js

@@ -6,3 +6,15 @@ output "APIGW_LOGIN_ENDPOINT" {
 output "API_ID" {
   value = aws_apigatewayv2_stage.api_gw_stage.api_id
 }
+
+output "Cognito_Pool_ID" {
+  value = aws_cognito_user_pool.pool.id
+}
+
+output "Cognito_App_ID" {
+  value = aws_cognito_user_pool_client.client.id
+}
+
+output "Cognito_App_UI_ID" {
+  value = aws_cognito_user_pool_client.ui_client.id
+}

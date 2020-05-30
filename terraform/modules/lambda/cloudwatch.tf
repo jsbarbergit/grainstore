@@ -5,5 +5,6 @@ resource "aws_cloudwatch_log_group" "log_group" {
   tags = {
     Application = "grainstore"
     Environment = var.environment
+    Function = var.function_name
   }
 }
