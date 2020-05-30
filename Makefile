@@ -42,3 +42,7 @@ auto-apply-dev: ## Apply terraform changes to DEV environment with confirmation
 .PHONY: all-dev 
 all-dev: ## Run full terraform setup for DEV environment
 	$(MAKE) -C $(TFDIR) all-dev
+
+.PHONY: start-app
+start-app: ## Run the React SPA locally
+	npm start --prefix app/grainstore-ui/

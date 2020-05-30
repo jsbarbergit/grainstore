@@ -20,10 +20,13 @@ AWS Serverless Infrastructure repo for Grainstore Application Components:
     * Terraform remote state lock table
     * Grainstore data store
 
+Also includes a basic React Single Page Application for querying data held in DynamoDBN and S3.
+
 ## Prerequisites
 
 * `make`
 * `terraform` (>= v0.12.12)
+* `npm`
 
 ## Architecture
 
@@ -49,6 +52,36 @@ All Infra is built using Terraform, e.g.: `make all-dev` will build and deploy a
 
 </p>
 </details>
+
+## Configure the React App
+
+The React app requires AWS configuration to be stored in `app/grainstore-ui/src/config.js` which is not stored in this repo as it contains semi-sensitive data. Example `config.js` file is as follows:
+
+```
+export default {
+    cognito: {
+      REGION: "<AWS_REGION>",
+      USER_POOL_ID: "<COGNITO_POOL_ID>",
+      APP_CLIENT_ID: "<COGNITO_APP_CLIENT_ID>"
+    },
+    apiGateway: {
+      REGION: "<AWS_REGION>",
+      URL: "<API_GATEWAY_STAGE_ENDPOINT_URL>"
+    },
+  };
+```
+
+## Run React App Locally
+
+To serve the React SPA on your local machine, run the following:
+
+`make start-app`
+
+The site should be loaded in your browser, but if not, browse to:
+
+`http://localhost:3000`
+
+**Note** you will need to authenticate against Cognito to use the app.
 
 ## Example Usage
 
