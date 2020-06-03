@@ -1,0 +1,10 @@
+TODO
+- Update architecture diagram to show React App with Lambdas and S3 ops
+- try/catch in lambda funcs
+- refactor react app for consistency once it's functional
+- tests
+- publish spa to github pages
+- setup domain and certs
+- getrecord pagination
+- auth password reset && signup(?)
+- ui layout and styling

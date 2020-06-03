@@ -1,0 +1,68 @@
+title Grain Store Record System
+
+
+
+participantgroup #lightblue GrainStore Machines
+participant WeighBridge
+participant SamplingMachine
+end
+actor Farmer
+participantgroup #lightyellow Local
+participant PythonApp
+end
+participantgroup #lightgreen Cloud
+participant Auth
+participant API
+participant ImageStore
+participant Database
+end
+
+Farmer->PythonApp: Take Reading
+
+alt Farmer not logged in
+PythonApp->Auth: Send Credentials
+Auth->Auth:Validate Credentials
+alt Credentials Valid
+Auth->PythonApp: Logon Success
+else Credentials Invalid
+Auth->PythonApp: Logon Failed
+end
+Success
+end 
+PythonApp->PythonApp: Connect to Serial Bus
+PythonApp<-WeighBridge:Read Data
+PythonApp<-SamplingMachine:Read Data
+PythonApp->PythonApp:Build Form
+Farmer->PythonApp:Complete Form
+PythonApp->PythonApp:Validate Form Data
+Farmer->PythonApp: Take Photo
+PythonApp->PythonApp: Take Photo
+Farmer->PythonApp: Submit Record
+PythonApp->API: Request ImageStore URL
+API->PythonApp: ImageStore URL
+PythonApp->ImageStore: Upload Image
+ref over ImageStore: PNG Image
+alt Upload Failed
+ImageStore->PythonApp: Upload Failed
+loop i < x
+PythonApp->ImageStore: Retry Upload
+ImageStore->PythonApp: Upload Result
+end 
+end
+ImageStore->PythonApp: Upload Success
+PythonApp->API:Submit Data Record
+ref over API: JSON Doc
+API->Database: Write Record
+Database->API: Result
+API->PythonApp: Result
+PythonApp->Farmer: Confirm Result
+PythonApp->PythonApp: Remove local data
+Farmer->Farmer: Next Customer or Pub
+
+
+
+
+
+
+
+

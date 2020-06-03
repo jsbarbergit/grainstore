@@ -1,97 +1,3 @@
-# Grainstore
-
-AWS Serverless Infrastructure repo for Grainstore Application Components:
-
-* API Gateway
-    * /login
-    * /signedurl
-    * /addrecord
-* Lambda
-    * Login Function
-    * Generate S3 Pre-Signed URL Function
-    * Add Record Function
-* Cognito
-    * User pool
-    * App Client
-* S3
-    * Terraform remote state bucket
-    * Grainstore image data bucket
-* DynamoDB
-    * Terraform remote state lock table
-    * Grainstore data store
-
-Also includes a basic React Single Page Application for querying data held in DynamoDBN and S3.
-
-## Prerequisites
-
-* `make`
-* `terraform` (>= v0.12.12)
-* `npm`
-
-## Architecture
-
-<details><summary>Click to expand</summary>
-<p>
-
-![Architecture Diagram](./diagrams/architecture.png)
-
-</p>
-</details>
-
-
-## Build
-
-All Infra is built using Terraform, e.g.: `make all-dev` will build and deploy a full development environment
-
-## Sequence Diagram
-
-<details><summary>Click to expand</summary>
-<p>
-
-![Sequence Diagram](./diagrams/sequence.png)
-
-</p>
-</details>
-
-## Configure the React App
-
-The React app requires AWS configuration to be stored in `app/grainstore-ui/src/config.js` which is not stored in this repo as it contains semi-sensitive data. Example `config.js` file is as follows:
-
-```
-export default {
-    cognito: {
-      REGION: "<AWS_REGION>",
-      USER_POOL_ID: "<COGNITO_POOL_ID>",
-      APP_CLIENT_ID: "<COGNITO_APP_CLIENT_ID>"
-    },
-    apiGateway: {
-      REGION: "<AWS_REGION>",
-      URL: "<API_GATEWAY_STAGE_ENDPOINT_URL>"
-    },
-  };
-```
-
-## Run React App Locally
-
-To serve the React SPA on your local machine, run the following:
-
-`make start-app`
-
-The site should be loaded in your browser, but if not, browse to:
-
-`http://localhost:3000`
-
-**Note** you will need to authenticate against Cognito to use the app.
-
-## Example Usage
-
-The following python (v3.8) example highlights how a new record could be added with cognito JWT based auth:
-
-<details><summary>Show Example Code</summary>
-<p>
-
-```
-
 #!/usr/bin/env python3
 import requests
 import json
@@ -152,9 +58,9 @@ def addrecord(endpoint, token, newrecord):
     }
     response = requests.post(endpoint + '/addrecord', headers=headers, json = newrecord)
     print('AddRecord StatusCode: ' + str(response.status_code))
-    print('AddRecord Response Body :' + response.text)
     if response.status_code != 200:
         print('ERROR received from api. StatusCode: ' + str(response.status_code))
+        print('AddRecord Error was: ' + response.text)
         return False
     return True
 
@@ -167,6 +73,7 @@ def getsignedurl(endpoint, token, customerdetails):
     signedurl = requests.post(endpoint + '/signedurl', headers=headers, json = customerdetails)
     if signedurl.status_code != 200:
         print('ERROR getting signed url. StatusCode: ' + str(signedurl.status_code))
+        print('Error - signedurl error --> ' + signedurl.text)
         return None
     return signedurl.text
 
@@ -184,15 +91,44 @@ def postimage(url, fields, file, uuid):
     print('Upload via presigned url success. StatusCode: ' + str(http_response.status_code))
     return True
 
+def getrecord(endpoint, token, query):
+    # Now call authenticated endpoint
+    headers = {
+        'Authorization': token,
+        'Content-Type': 'application/json'
+    }
+    response = requests.post(endpoint + '/getrecord', headers=headers, json = query)
+    print('GetRecord StatusCode: ' + str(response.status_code))
+    if response.status_code != 200:
+        print('ERROR received from api. StatusCode: ' + str(response.status_code))
+        print('GetRecord Error was: ' + response.text)
+        return None
+    return response.text
+
+def publishimage(endpoint, token, query):
+    # Now call authenticated endpoint
+    headers = {
+        'Authorization': token,
+        'Content-Type': 'application/json'
+    }
+    response = requests.post(endpoint + '/publishimage', headers=headers, json = query)
+    print('PublishImage StatusCode: ' + str(response.status_code))
+    if response.status_code != 200:
+        print('ERROR received from api. StatusCode: ' + str(response.status_code))
+        print('PublishImage Error was: ' + response.text)
+        return None
+    return response.text
+
+
 def main():
-    region="<aws_region>"
-    username = "<cognito_username>"
-    password = "<cognito_password>"
-    poolid = "<cognito_poolid>"
-    clientid = "<cognito_appclient_id>"
-    secret = "<cognito_appclient_secret>"
-    apiendpoint = "https://<api_id>.execute-api.<aws_region>.amazonaws.com/<api_stage>"
-    customerid = "<customer_id"
+    region="eu-west-2"
+    username = "REPLACEME"
+    password = "REPLACEME$$w0rd"
+    poolid = "REPLACEME"
+    clientid = "REPLACEME"
+    secret = "REPLACEME"
+    apiendpoint = "REPLACEME"
+    customerid = "companya"
 
     # Login via cognito and retrieve access token
     token = login(apiendpoint, username, password, poolid, clientid, secret)
@@ -213,7 +149,7 @@ def main():
 
     # Get presigned url for image uploads and a uuid to tie image and data together
     customerdata = {
-        "customerid": customerid
+        "CustomerId": customerid
     }
     signedurl_response = getsignedurl(apiendpoint, token, customerdata)
     if signedurl_response == None:
@@ -224,7 +160,7 @@ def main():
     fields = signedurl['fields']
     uuid = signedurl['uuid']
 
-    # POST a test image file to S3 using presigned url
+    # POST the image to S3
     testfile = 'test_image.png'
     upload_result = postimage(url, fields, testfile, uuid)
     if not upload_result:
@@ -232,7 +168,6 @@ def main():
         return
 
     # Call authenticated addnewrecord api 
-     # Call authenticated addnewrecord api 
     newrecord = {
         "UUID": uuid,
         "CustomerId": customerid,
@@ -246,12 +181,31 @@ def main():
         print('ERROR - Failed to add new record')
         return
     print('New Record Added with UUID: ' + uuid)
+
+    # Call authenticated getrecord api 
+    query = {
+        "CustomerId": customerid
+    }
+    result = getrecord(apiendpoint, token, query)
+    if result == None:
+        print('ERROR - Failed to get record')
+        return
+    result_json = json.loads(result)
+    print('Record Count: ' + str(result_json['Count']))
+
+    # Get URL for pulished Image
+    query = {
+        "ImageKey": result_json['Items'][0]['ImageKey'],
+        "UUID": result_json['Items'][0]['UUID']
+    }
+    image_url = publishimage(apiendpoint, token, query)
+    if image_url == None:
+        print('ERROR - Failed to publish image')
+        return
+    print("Image URL: " + image_url)
+    
+    
     return
 
 if __name__ == "__main__":
     main()
-
-```
-
-</p>
-</details>
