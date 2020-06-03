@@ -122,13 +122,13 @@ def publishimage(endpoint, token, query):
 
 def main():
     region="eu-west-2"
-    username = "johnb2"
-    password = "Pa$$w0rd"
-    poolid = "eu-west-2_9E8x3OLUG"
-    clientid = "tueuj2lurekh2qdpvus2vr365"
-    secret = "15rvhprbqjq984a5kg8hu5c4dgdin2ta14k5lg8pl900cdko4bc7"
-    apiendpoint = "https://aojuwiinsb.execute-api.eu-west-2.amazonaws.com/dev"
-    customerid = "def456"
+    username = "REPLACEME"
+    password = "REPLACEME$$w0rd"
+    poolid = "REPLACEME"
+    clientid = "REPLACEME"
+    secret = "REPLACEME"
+    apiendpoint = "REPLACEME"
+    customerid = "companya"
 
     # Login via cognito and retrieve access token
     token = login(apiendpoint, username, password, poolid, clientid, secret)
