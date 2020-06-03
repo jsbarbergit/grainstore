@@ -5,3 +5,6 @@ TODO
 - tests
 - publish spa to github pages
 - setup domain and certs
+- getrecord pagination
+- auth password reset && signup(?)
+- ui layout and styling
