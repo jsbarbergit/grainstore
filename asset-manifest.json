@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/grainstore/static/css/main.4ecf0297.chunk.css",
+    "main.js": "/grainstore/static/js/main.725eae04.chunk.js",
+    "main.js.map": "/grainstore/static/js/main.725eae04.chunk.js.map",
+    "runtime-main.js": "/grainstore/static/js/runtime-main.a4c981df.js",
+    "runtime-main.js.map": "/grainstore/static/js/runtime-main.a4c981df.js.map",
+    "static/css/2.829c9cb5.chunk.css": "/grainstore/static/css/2.829c9cb5.chunk.css",
+    "static/js/2.27c78288.chunk.js": "/grainstore/static/js/2.27c78288.chunk.js",
+    "static/js/2.27c78288.chunk.js.map": "/grainstore/static/js/2.27c78288.chunk.js.map",
+    "index.html": "/grainstore/index.html",
+    "precache-manifest.98d66851b929927ae8d87e9e120999d1.js": "/grainstore/precache-manifest.98d66851b929927ae8d87e9e120999d1.js",
+    "service-worker.js": "/grainstore/service-worker.js",
+    "static/css/2.829c9cb5.chunk.css.map": "/grainstore/static/css/2.829c9cb5.chunk.css.map",
+    "static/css/main.4ecf0297.chunk.css.map": "/grainstore/static/css/main.4ecf0297.chunk.css.map",
+    "static/js/2.27c78288.chunk.js.LICENSE.txt": "/grainstore/static/js/2.27c78288.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a4c981df.js",
+    "static/css/2.829c9cb5.chunk.css",
+    "static/js/2.27c78288.chunk.js",
+    "static/css/main.4ecf0297.chunk.css",
+    "static/js/main.725eae04.chunk.js"
+  ]
+}
