@@ -83,6 +83,12 @@ The site should be loaded in your browser, but if not, browse to:
 
 **Note** you will need to authenticate against Cognito to use the app.
 
+##  Deploy the React App to S3
+
+Authenticate to the target  AWS account, then run the `publish-to-s3.sh` script in the root of this repo.
+
+**Note** The intention is to automate deployments triggered by git hooks.
+
 ## Example Usage
 
 The following python (v3.8) example highlights how a new record could be added with cognito JWT based auth:

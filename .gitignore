@@ -3,3 +3,4 @@ terraform.tfstate.backup
 .vscode
 node_modules/
 config.js
+.DS_Store
