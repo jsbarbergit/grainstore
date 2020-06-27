@@ -19,7 +19,7 @@ export default function Results() {
             const token = user.signInUserSession.accessToken.jwtToken;
             const payload = {
                 body: {
-                    "CustomerId": customerId
+                    "Account": customerId
                 },
                 headers: {
                     "Authorization": token,

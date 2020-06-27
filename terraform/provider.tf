@@ -7,12 +7,12 @@ terraform {
     key            = "grainstore.tfstate"
   }
 
-  required_version = "0.12.25"
+  required_version = "0.12.28"
 }
 
 provider "aws" {
   region  = var.aws_region
-  version = "~> 2.63"
+  version = "~> 2.68"
 
   assume_role {
     role_arn     = var.cibuild_assumerole

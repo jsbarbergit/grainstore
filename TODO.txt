@@ -7,3 +7,11 @@ TODO
 - ui layout and styling
 - Move to correct DNS
 - IaC for ACM, Cloudfront and S3
+
+# JSON Update
+- Primary Key will be a composite value of Account__TicketID, sort key will be Direction
+- /getrecord returns all records - will need to paginate: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Query.Pagination.html
+    - rename to be more meaningful
+    - partition key has to be known to perform the query, so stick with this approach
+        - return all records to client and do filtering on client side - record size limit is 1MB
+            LastEvaluatedKey

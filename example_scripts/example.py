@@ -128,7 +128,7 @@ def main():
     clientid = "REPLACEME"
     secret = "REPLACEME"
     apiendpoint = "REPLACEME"
-    customerid = "companya"
+    account = "companya"
 
     # Login via cognito and retrieve access token
     token = login(apiendpoint, username, password, poolid, clientid, secret)
@@ -149,7 +149,7 @@ def main():
 
     # Get presigned url for image uploads and a uuid to tie image and data together
     customerdata = {
-        "CustomerId": customerid
+        "Account": account
     }
     signedurl_response = getsignedurl(apiendpoint, token, customerdata)
     if signedurl_response == None:
@@ -169,12 +169,22 @@ def main():
 
     # Call authenticated addnewrecord api 
     newrecord = {
-        "UUID": uuid,
-        "CustomerId": customerid,
-        "Weight": 23.11,
-        "Value": 12.22,
+        "Account": "HMF",
+        "AdmixPct": 1.00,
+        "BushelKg": 61.50,
+        "Crop": "Winter Wheat",
+        "Direction": "In",
+        "DryWeightTonnes": 7.68,
+        "Image1": "pathdir",
         "ImageBucket": url,
-        "ImageKey": fields['key']
+        "ImageKey": fields['key'],
+        "MoisturePct": 16.30,
+        "SoftwareID": 1,
+        "TicketID": 23699,
+        "Timestamp": "20200626105132",
+        "UUID": uuid,
+        "VehicleReg": "NX13 COU",
+        "WetWeightTonnes": 8.04
     }
     result = addrecord(apiendpoint, token, newrecord)
     if not result:
@@ -184,7 +194,7 @@ def main():
 
     # Call authenticated getrecord api 
     query = {
-        "CustomerId": customerid
+        "Account": account
     }
     result = getrecord(apiendpoint, token, query)
     if result == None:
@@ -192,6 +202,10 @@ def main():
         return
     result_json = json.loads(result)
     print('Record Count: ' + str(result_json['Count']))
+    if "NextRecord" in result_json:
+        print('Pagination Required. Next Record: ' + str(result_json['NextRecord']))
+    else:
+        print('No pagination required')
 
     # Get URL for pulished Image
     query = {

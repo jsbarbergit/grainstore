@@ -55,10 +55,10 @@ variable "log_retention_days" {
 
 # DynamoDB Vars
 variable "grainstore_data_partition_key_name" {
-  default = "UUID"
+  default = "Account"
 }
 variable "grainstore_data_sort_key_name" {
-  default = "CustomerId"
+  default = "Timestamp"
 }
 
 variable "dynamo_pitr" {

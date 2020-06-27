@@ -108,19 +108,19 @@ resource "aws_s3_bucket_public_access_block" "grainstore_public_access_block" {
 }
 
 resource "aws_s3_bucket_object" "index_file" {
-  bucket = aws_s3_bucket.grainstore_public_bucket.id
-  key    = "index.html"
-  source = "htmlfiles/index.html"
-  acl    = "public-read"
-  etag   = filemd5("htmlfiles/index.html")
+  bucket        = aws_s3_bucket.grainstore_public_bucket.id
+  key           = "index.html"
+  source        = "htmlfiles/index.html"
+  acl           = "public-read"
+  etag          = filemd5("htmlfiles/index.html")
   storage_class = "ONEZONE_IA"
 }
 
 resource "aws_s3_bucket_object" "error_file" {
-  bucket = aws_s3_bucket.grainstore_public_bucket.id
-  key    = "error.html"
-  source = "htmlfiles/error.html"
-  acl    = "public-read"
-  etag   = filemd5("htmlfiles/error.html")
+  bucket        = aws_s3_bucket.grainstore_public_bucket.id
+  key           = "error.html"
+  source        = "htmlfiles/error.html"
+  acl           = "public-read"
+  etag          = filemd5("htmlfiles/error.html")
   storage_class = "ONEZONE_IA"
 }

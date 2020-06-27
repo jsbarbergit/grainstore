@@ -1,0 +1,17 @@
+{
+    "Account": "HMF",
+    "AdmixPct": 1.00,
+    "BushelKg": 61.50,
+    "Crop": "Winter Wheat",
+    "Direction": "In",
+    "DryWeightTonnes": 7.68,
+    "Image1": "pathdir",
+    "ImageKey": "https://some.url.com/key/image.png",
+    "MoisturePct": 16.30,
+    "SoftwareID": 1,
+    "TicketID": 23699,
+    "Timestamp": "20200626105132",
+    "UUID": "6ba7b810-9dad-11d1-80b4-00c04fd430c8",
+    "VehicleReg": "NX13 COU",
+    "WetWeightTonnes": 8.04
+}

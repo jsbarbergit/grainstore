@@ -78,14 +78,14 @@ def lambda_handler(event, context):
   else:
     return "Unknown event type"
 
-  for field in ["CustomerId"]:
+  for field in ["Account"]:
     if bodyjson[field] is None:
       return return_failure("Invalid Request: Missing Value for " + field, 500)
 
   if "UUID" not in bodyjson:
     bodyjson["UUID"] = generate_uuid()
   if "ImageKey" not in bodyjson:
-    bodyjson["ImageKey"] = bodyjson["CustomerId"] + '/' + str(int(time.time())) + '/' + bodyjson["UUID"]
+    bodyjson["ImageKey"] = bodyjson["Account"] + '/' + str(int(time.time())) + '/' + bodyjson["UUID"]
   
   response = generate_url(bucket, bodyjson["ImageKey"])
   

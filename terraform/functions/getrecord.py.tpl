@@ -5,8 +5,8 @@ from boto3.dynamodb.conditions import Key
 from decimal import Decimal
 
 # keep the db initialization outside of the functions to maintain them as long as the container lives
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('${grainstore_data_table_name}')
+DBCLIENT = boto3.resource('dynamodb')
+DBTABLE = DBCLIENT.Table('${grainstore_data_table_name}')
 
 # Convert Dynamo's Decimal stored Numbers to floats to avoid json serializing issue
 class DecimalEncoder(json.JSONEncoder):
@@ -18,14 +18,14 @@ class DecimalEncoder(json.JSONEncoder):
 def remove_control_characters(s):
     return "".join(ch for ch in s if unicodedata.category(ch)[0]!="C")
 
-
-        
 def get_item(pkeyvalue):
   try:
-    # Query on CustomerId Partition Key
-    response = table.query(
+    # Query on Partition Key
+    # Sort key is timestamp. ScanIndexForward controls order direction
+    response = DBTABLE.query(
       Select='ALL_ATTRIBUTES',
-      KeyConditionExpression=Key('CustomerId').eq(pkeyvalue)
+      KeyConditionExpression=Key('Account').eq(pkeyvalue),
+      ScanIndexForward=True
     )
   except Exception as e:
     return None, e.__str__()
@@ -70,11 +70,11 @@ def lambda_handler(event, context):
     return "Unknown event type"
 
   # Validate input
-  for field in ["CustomerId"]:
+  for field in ["Account"]:
     if bodyjson[field] is None:
       return return_failure("Invalid Request: Missing Value for " + field, 500)
   
-  result, err = get_item(bodyjson["CustomerId"])
+  result, err = get_item(bodyjson["Account"])
   if err != None:
     return return_failure('ERROR Getting Data - ' + str(err), 500)
   # Build reponse body message
@@ -82,5 +82,11 @@ def lambda_handler(event, context):
     "Count": json.loads(result)['Count'],
     "Items": json.loads(result)['Items']
   }
+  # Were the results paginated - if so return nextrecord value
+  if "LastEvaluatedKey" in result:
+    msg['NextRecord'] = {
+      "NextRecord": json.loads(result)['LastEvaluatedKey']
+    }
+  
   print('Records Found: ' + str(json.loads(result)['Count']))
   return return_success(msg)
