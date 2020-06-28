@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./Results.css";
 import { useLocation } from "react-router-dom";
-import { Table, Image } from "react-bootstrap";
+import { Table, Image, Badge } from "react-bootstrap";
 import { API, Auth } from "aws-amplify";
 import { onError } from "../libs/errorLib";
 import { useAppContext } from "../libs/contextLib";
@@ -53,8 +53,11 @@ export default function Data() {
     }
 
     function renderData() {
-        return (
-            // TODO Add a back to search resiults page link here
+        // Convert Timestamp string back into Date format
+        const iso_timestamp = new Date(record['Timestamp']);
+        console.log(iso_timestamp.toLocaleTimeString());
+        return ( 
+            // TODO Add a back to search results page link here
             <Table striped bordered hover variant="dark">
                 <thead>
                     <tr>
@@ -64,15 +67,43 @@ export default function Data() {
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Weight</td>
-                        <td>£{record['Weight']}</td>
+                        <td>Record Datetime</td>
+                        <td>{iso_timestamp.toLocaleDateString()}  -  {iso_timestamp.toLocaleTimeString()}</td>
                     </tr>
                     <tr>
-                        <td>Value</td>
-                        <td>{record['Value']}kg</td>
+                        <td>Crop</td>
+                        <td>{record['Crop']}</td>
                     </tr>
                     <tr>
-                        <td>Photo</td>
+                        <td>Direction</td>
+                        <td>{record['Direction']}</td>
+                    </tr>
+                    <tr>
+                        <td>Vehicel Reg</td>
+                        <td>{record['VehicleReg']}</td>
+                    </tr>
+                    <tr>
+                        <td>Admix</td>
+                        <td>{record['AdmixPct']} %</td>
+                    </tr>
+                    <tr>
+                        <td>Bushel Weight</td>
+                        <td>{record['BushelKg']} Kg</td>
+                    </tr>
+                    <tr>
+                        <td>Dry Weight </td>
+                        <td>{record['DryWeightTonnes']} tonnes</td>
+                    </tr>
+                    <tr>
+                        <td>Moisture</td>
+                        <td>{record['MoisturePct']} %</td>
+                    </tr>
+                    <tr>
+                        <td>Wet Weight</td>
+                        <td>{record['WetWeightTonnes']} tonnes</td>
+                    </tr>
+                    <tr>
+                        <td>Sample Bag</td>
                         <td>
                             <Image src={url} rounded fluid />
                         </td>
@@ -85,6 +116,9 @@ export default function Data() {
 
     return (
         <div className="Data">
+
+            <h1><Badge variant="primary">Account:</Badge><Badge variant="light">{record['Account']}</Badge></h1> 
+            <h1><Badge variant="secondary">TicketID:</Badge><Badge variant="light">{record['TicketID']}</Badge></h1>
              {isAuthenticated ? !isLoading && renderData() : renderLander()}
         </div>
     );

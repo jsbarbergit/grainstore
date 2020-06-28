@@ -45,30 +45,38 @@ export default function Results() {
 
     function renderRecordsList(records) {
         console.log('rendering');
-        return [{}].concat(records.Items).map((record, i) =>
-        i !== 0 ? (
-          <LinkContainer key={record.UUID} to={{
-              pathname: `/results/${customerId}/${record.UUID}`,
-              state: {
-                  recordData: record
-              }
-            }}>
-            <ListGroup>
-                <ListGroupItem action="true">
-                    {i + ":  " + record.UUID}
-                </ListGroupItem>
-            </ListGroup>
-          </LinkContainer>
-        ):(
-            <LinkContainer key={customerId} to={`/results/${customerId}`}>
-                <ListGroupItem>
-                <h4>
-                    <b>{customerId.toUpperCase()}</b> Records (Click Row For Details): 
-                </h4>
-                </ListGroupItem>
-            </LinkContainer>
-        )
-        );
+        var return_data = ""
+        if (records.Count > 0) { 
+            console.log("records found");
+            return_data = [{}].concat(records.Items).map((record, i) =>
+                i !== 0 ? (
+                    <LinkContainer key={record.UUID} to={{
+                    pathname: `/results/${customerId}/${record.UUID}`,
+                    state: {
+                        recordData: record
+                    }
+                    }}>
+                    <ListGroup>
+                        <ListGroupItem action="true">
+                        <h3>TicketID: {record.TicketID}</h3>
+                        <b>Date:</b> {record.Timestamp.split('T', 1, 0)} <b>Time:</b> {record.Timestamp.substring(11,19)}
+                        <br />  
+                        <b>Vehicle Reg</b> {record.VehicleReg}
+                        </ListGroupItem>  
+                    </ListGroup>
+                </LinkContainer>
+                ):(
+                    <LinkContainer key={customerId} to={`/results/${customerId}`}>
+                        <ListGroupItem>
+                        <h4>
+                            <b>Click Ticket Below For Details:</b>
+                        </h4>
+                        </ListGroupItem>
+                    </LinkContainer>
+                )
+                );
+        }
+        return return_data;
     }
 
     function renderLander() {
@@ -88,8 +96,7 @@ export default function Results() {
             summary = 'No Records Found'
         }
         else {
-            const count = records.Count
-            summary = count + " Records Found"
+            summary = "Account: " + customerId.toUpperCase()
         }
         
         

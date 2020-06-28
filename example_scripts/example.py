@@ -168,6 +168,7 @@ def main():
         return
 
     # Call authenticated addnewrecord api 
+    record_timestamp = datetime.now()
     newrecord = {
         "Account": "HMF",
         "AdmixPct": 1.00,
@@ -181,7 +182,7 @@ def main():
         "MoisturePct": 16.30,
         "SoftwareID": 1,
         "TicketID": 23699,
-        "Timestamp": "20200626105132",
+        "Timestamp": str(record_timestamp.isoformat()),,
         "UUID": uuid,
         "VehicleReg": "NX13 COU",
         "WetWeightTonnes": 8.04
