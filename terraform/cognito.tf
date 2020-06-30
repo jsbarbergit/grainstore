@@ -36,6 +36,7 @@ resource "aws_cognito_user_pool_client" "client" {
   user_pool_id        = aws_cognito_user_pool.pool.id
   generate_secret     = true
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH"]
+  refresh_token_validity = var.app_token_refresh_expiry
 }
 
 resource "aws_cognito_user_pool_client" "ui_client" {
@@ -44,4 +45,5 @@ resource "aws_cognito_user_pool_client" "ui_client" {
   generate_secret               = false
   explicit_auth_flows           = ["USER_PASSWORD_AUTH"]
   prevent_user_existence_errors = "ENABLED"
+  refresh_token_validity = var.ui_token_refresh_expiry
 }

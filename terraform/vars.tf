@@ -66,3 +66,18 @@ variable "dynamo_pitr" {
   type        = bool
   description = "Enable PITR for grainstore dynamodb data table"
 }
+
+variable "app_token_refresh_expiry" {
+  description = "Days to expire python app refresh token after"
+  default = 7
+}
+
+variable "ui_token_refresh_expiry" {
+  description = "Days to expire SPA refresh token after"
+  default = 1
+}
+
+variable "get_item_limit" {
+  description = "Number of rows to fetch in a single query for the getitem function"
+  default = 10
+}

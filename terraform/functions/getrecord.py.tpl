@@ -25,12 +25,27 @@ def get_item(pkeyvalue):
     response = DBTABLE.query(
       Select='ALL_ATTRIBUTES',
       KeyConditionExpression=Key('Account').eq(pkeyvalue),
-      ScanIndexForward=True
+      ScanIndexForward=True,
+      Limit=${get_item_limit}
     )
   except Exception as e:
     return None, e.__str__()
   return DecimalEncoder().encode(response), None
 
+def get_next_item(pkeyvalue, nextRecord):
+  try:
+    # Query on Partition Key
+    # Sort key is timestamp. ScanIndexForward controls order direction
+    response = DBTABLE.query(
+      Select='ALL_ATTRIBUTES',
+      KeyConditionExpression=Key('Account').eq(pkeyvalue),
+      ExclusiveStartKey=nextRecord,
+      ScanIndexForward=True,
+      Limit=${get_item_limit}
+    )
+  except Exception as e:
+    return None, e.__str__()
+  return DecimalEncoder().encode(response), None
 
 def return_success(response):
   print("Sending success event")
@@ -74,7 +89,11 @@ def lambda_handler(event, context):
     if bodyjson[field] is None:
       return return_failure("Invalid Request: Missing Value for " + field, 500)
   
-  result, err = get_item(bodyjson["Account"])
+  if "LastEvaluatedKey" not in bodyjson:
+    result, err = get_item(bodyjson["Account"])
+  else:
+    result, err = get_next_item(bodyjson["Account"],bodyjson["LastEvaluatedKey"])
+
   if err != None:
     return return_failure('ERROR Getting Data - ' + str(err), 500)
   # Build reponse body message
@@ -84,9 +103,7 @@ def lambda_handler(event, context):
   }
   # Were the results paginated - if so return nextrecord value
   if "LastEvaluatedKey" in result:
-    msg['NextRecord'] = {
-      "NextRecord": json.loads(result)['LastEvaluatedKey']
-    }
-  
+    msg['NextRecord'] = json.loads(result)['LastEvaluatedKey']
+
   print('Records Found: ' + str(json.loads(result)['Count']))
   return return_success(msg)
