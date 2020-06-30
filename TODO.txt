@@ -1,8 +1,7 @@
 TODO
-- try/catch in lambda funcs
 - refactor react app for consistency once it's functional
 - tests
-- getrecord pagination
+- update more records feature with a back button (store previous lastrecord value in state)
 - auth password reset && signup(?)
 - ui layout and styling
 - Move to correct DNS

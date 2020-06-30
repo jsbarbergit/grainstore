@@ -4,6 +4,7 @@ module "grainstore_get_record" {
   template_file_rendered = templatefile("${path.module}/functions/getrecord.py.tpl", {
     aws_region                 = var.aws_region,
     grainstore_data_table_name = local.table_name,
+    get_item_limit = var.get_item_limit
   })
   function_name      = "GrainstoreGetRecord-${var.environment}"
   role_arn           = aws_iam_role.grainstore_get_record_role.arn

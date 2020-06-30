@@ -4,7 +4,7 @@ import { useAppContext } from "../libs/contextLib";
 import { useParams } from "react-router-dom";
 import { API, Auth } from "aws-amplify";
 import { LinkContainer } from "react-router-bootstrap";
-import { Jumbotron, ListGroup, ListGroupItem } from "react-bootstrap";
+import { Jumbotron, ListGroup, ListGroupItem, Button } from "react-bootstrap";
 import { onError } from "../libs/errorLib";
 
 export default function Results() {
@@ -17,6 +17,7 @@ export default function Results() {
         async function loadRecord() {
             const user = await Auth.currentAuthenticatedUser();
             const token = user.signInUserSession.accessToken.jwtToken;
+            // TODO If we have Nextrecord values - add them to the request body
             const payload = {
                 body: {
                     "Account": customerId
@@ -42,6 +43,42 @@ export default function Results() {
 
         onLoad();
         }, [customerId]);
+
+    
+    async function loadMoreItems() {
+        console.log('loading more records');
+
+        try {
+        const nextBatch = await fetchNextBatch();
+        setRecords(nextBatch);
+        setIsLoading(false);
+        renderRecordsList(records);
+        } catch (e) {
+        onError(e);
+        }
+    }
+
+    async function fetchNextBatch() {
+        console.log('loading more records');
+        const user = await Auth.currentAuthenticatedUser();
+        const token = user.signInUserSession.accessToken.jwtToken;
+        // TODO If we have Nextrecord values - add them to the request body
+        const payload = {
+            body: {
+                "Account": customerId,
+                "LastEvaluatedKey":{
+                    "Account": records.NextRecord.Account,
+                    "Timestamp": records.NextRecord.Timestamp
+                }
+            },
+            headers: {
+                "Authorization": token,
+                "Content-Type": "application/json"
+            }
+        }
+        // console.log(token)
+        return API.post("grainstore-api", "/getrecord", payload);
+    }
 
     function renderRecordsList(records) {
         console.log('rendering');
@@ -75,6 +112,12 @@ export default function Results() {
                     </LinkContainer>
                 )
                 );
+        }
+        if (typeof records.NextRecord !== 'undefined') {
+            const nextRecordAccount = records.NextRecord.Account;
+            const nextRecordTimestamp = records.NextRecord.Timestamp;
+            console.log('there is more. next record --> Account: ' + nextRecordAccount + ' Timestamp: ' + nextRecordTimestamp);
+            return_data.push(<Button variant="primary" key="paginator" size="lg" block onClick={loadMoreItems}>Show more Records</Button>);
         }
         return return_data;
     }
