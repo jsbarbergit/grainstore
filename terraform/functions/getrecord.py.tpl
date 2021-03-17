@@ -25,7 +25,7 @@ def get_item(pkeyvalue):
     response = DBTABLE.query(
       Select='ALL_ATTRIBUTES',
       KeyConditionExpression=Key('Account').eq(pkeyvalue),
-      ScanIndexForward=True,
+      ScanIndexForward=False,
       Limit=${get_item_limit}
     )
   except Exception as e:

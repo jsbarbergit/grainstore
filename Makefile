@@ -23,12 +23,10 @@ validate: ## Validate Terrform in terraform/ dir
 
 .PHONY: scan
 scan: ## Scan Terrform in terraform/ dir for security issues
-	$
 	$(MAKE) -C $(TFDIR) scan
 
 .PHONY: plan-dev 
 plan-dev: ## Create a  Terrform Plan for the DEV environment
-	$
 	$(MAKE) -C $(TFDIR) plan-dev
 
 .PHONY: apply-dev

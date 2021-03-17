@@ -7,7 +7,7 @@ terraform {
     key            = "grainstore.tfstate"
   }
 
-  required_version = "0.12.28"
+  required_version = "0.13.3"
 }
 
 provider "aws" {
