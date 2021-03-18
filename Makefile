@@ -44,3 +44,7 @@ all-dev: ## Run full terraform setup for DEV environment
 .PHONY: start-app
 start-app: ## Run the React SPA locally
 	npm start --prefix app/grainstore-ui/
+
+.PHONY: publish-gh-pages
+publish-gh-pages: ## Publish the react site to Github pages site
+	./scripts/publish-to-gh-pages.sh

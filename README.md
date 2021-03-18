@@ -25,7 +25,7 @@ Also includes a basic React Single Page Application for querying data held in Dy
 ## Prerequisites
 
 * `make`
-* `terraform` (>= v0.12.12)
+* `terraform` (>= v0.13.3)
 * `npm`
 
 ## Architecture

@@ -40,7 +40,7 @@ def get_next_item(pkeyvalue, nextRecord):
       Select='ALL_ATTRIBUTES',
       KeyConditionExpression=Key('Account').eq(pkeyvalue),
       ExclusiveStartKey=nextRecord,
-      ScanIndexForward=True,
+      ScanIndexForward=False,
       Limit=${get_item_limit}
     )
   except Exception as e:

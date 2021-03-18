@@ -6,13 +6,15 @@ import { API, Auth } from "aws-amplify";
 import { LinkContainer } from "react-router-bootstrap";
 import { Jumbotron, ListGroup, ListGroupItem, Button } from "react-bootstrap";
 import { onError } from "../libs/errorLib";
+import { useHistory } from "react-router-dom";
+
 
 export default function Results() {
     const { customerId } = useParams();
     const [records, setRecords] = useState([]);
     const { isAuthenticated } = useAppContext();
     const [isLoading, setIsLoading] = useState(true);
-
+    const history = useHistory();
     useEffect(() => {
         async function loadRecord() {
             const user = await Auth.currentAuthenticatedUser();
@@ -117,8 +119,10 @@ export default function Results() {
             const nextRecordAccount = records.NextRecord.Account;
             const nextRecordTimestamp = records.NextRecord.Timestamp;
             console.log('there is more. next record --> Account: ' + nextRecordAccount + ' Timestamp: ' + nextRecordTimestamp);
-            return_data.push(<Button variant="primary" key="paginator" size="lg" block onClick={loadMoreItems}>Show more Records</Button>);
+            return_data.push(<Button variant="primary" key="paginator" size="lg" block onClick={loadMoreItems}>Show more Records</Button>); 
+            
         }
+        return_data.push(<Button variant="primary" key="goback" size="lg" block onClick={history.goBack}>Go Back</Button>);
         return return_data;
     }
 
