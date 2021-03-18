@@ -3,6 +3,8 @@ import { Link, useHistory } from "react-router-dom";
 import { LinkContainer } from "react-router-bootstrap";
 import { Navbar, Nav, NavItem } from "react-bootstrap";
 import "./App.css";
+import "./footer.css";
+import config from './config';
 import Routes from "./Routes";
 // Is this really needed? relates to issue with navbar
 import '../node_modules/bootstrap/dist/css/bootstrap.css';
@@ -94,7 +96,13 @@ function App() {
       >
         <Routes />
       </AppContext.Provider>
+      <footer id="sticky-footer">
+        <div class="container text-center">
+          <small>Grainstore UI Version: {config.app.VERSION}</small>
+        </div>
+      </footer>
     </div>
+
   );
 }
 

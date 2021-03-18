@@ -46,5 +46,9 @@ start-app: ## Run the React SPA locally
 	npm start --prefix app/grainstore-ui/
 
 .PHONY: publish-gh-pages
-publish-gh-pages: ## Publish the react site to Github pages site
+publish-gh-pages: ## Publish the react site to Github pages site (Deprecated)
 	./scripts/publish-to-gh-pages.sh
+
+.PHONY: publish-s3
+publish-s3: ## Publish the react site to S3 bucket fronted by Cloudfront (Active)
+	./scripts/publish-to-s3.sh
