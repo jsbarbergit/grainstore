@@ -68,6 +68,10 @@ export default {
       REGION: "<AWS_REGION>",
       URL: "<API_GATEWAY_STAGE_ENDPOINT_URL>"
     },
+    ,
+    app: {
+      VERSION: "0.1.0"
+    }
   };
 ```
 
