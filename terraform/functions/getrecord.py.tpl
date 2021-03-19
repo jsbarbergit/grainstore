@@ -3,6 +3,7 @@ import json
 import unicodedata
 from boto3.dynamodb.conditions import Key
 from decimal import Decimal
+import re
 
 # keep the db initialization outside of the functions to maintain them as long as the container lives
 DBCLIENT = boto3.resource('dynamodb')
@@ -20,14 +21,22 @@ def remove_control_characters(s):
 
 def get_item(pkeyvalue):
   try:
-    # Query on Partition Key
-    # Sort key is timestamp. ScanIndexForward controls order direction
-    response = DBTABLE.query(
-      Select='ALL_ATTRIBUTES',
-      KeyConditionExpression=Key('Account').eq(pkeyvalue),
-      ScanIndexForward=False,
-      Limit=${get_item_limit}
-    )
+    # Have we been passed a TicketID rather than an account id?
+    # No need to handle next item as only 1 record should ever be found
+    if re.match('^\d*$', pkeyvalue):
+      response = DBTABLE.scan(
+        Select='ALL_ATTRIBUTES',
+        FilterExpression=Key("TicketID").eq(pkeyvalue)
+      )
+    else:
+      # Query on Partition Key
+      # Sort key is timestamp. ScanIndexForward controls order direction
+      response = DBTABLE.query(
+        Select='ALL_ATTRIBUTES',
+        KeyConditionExpression=Key('Account').eq(pkeyvalue),
+        ScanIndexForward=False,
+        Limit=${get_item_limit}
+      )
   except Exception as e:
     return None, e.__str__()
   return DecimalEncoder().encode(response), None

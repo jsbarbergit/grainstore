@@ -120,9 +120,9 @@ export default function Results() {
             const nextRecordTimestamp = records.NextRecord.Timestamp;
             console.log('there is more. next record --> Account: ' + nextRecordAccount + ' Timestamp: ' + nextRecordTimestamp);
             return_data.push(<Button variant="primary" key="paginator" size="lg" block onClick={loadMoreItems}>Show more Records</Button>); 
-            
+            return_data.push(<Button variant="primary" key="goback" size="lg" block onClick={history.goBack}>Go Back</Button>);
         }
-        return_data.push(<Button variant="primary" key="goback" size="lg" block onClick={history.goBack}>Go Back</Button>);
+        
         return return_data;
     }
 
@@ -143,7 +143,11 @@ export default function Results() {
             summary = 'No Records Found'
         }
         else {
-            summary = "Account: " + customerId.toUpperCase()
+            if (customerId.match(/^\d*$/)) {
+                summary = "Ticket ID: " + customerId
+            } else {
+                summary = "Account: " + customerId.toUpperCase()
+            }
         }
         
         

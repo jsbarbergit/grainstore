@@ -77,8 +77,8 @@ function App() {
               <form className="form-inline" onSubmit={doSearch}>
                 <input  className="form-control mr-sm-2" 
                         type="search" 
-                        placeholder="Enter CustomerId" 
-                        aria-label="Enter CustomerId"
+                        placeholder="Customer or Ticket ID" 
+                        aria-label="Customer or Ticket ID"
                         value={customerId}
                         onChange={searchChange}
                         >
@@ -97,7 +97,7 @@ function App() {
         <Routes />
       </AppContext.Provider>
       <footer id="sticky-footer">
-        <div class="container text-center">
+        <div className="container text-center">
           <small>Grainstore UI Version: {config.app.VERSION}</small>
         </div>
       </footer>
