@@ -8,8 +8,8 @@
 # testing
 /coverage
 
-# production
-# /build
+# don't include build as this will bundle config secrets
+/build
 
 # misc
 .DS_Store
