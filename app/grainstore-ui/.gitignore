@@ -9,7 +9,7 @@
 /coverage
 
 # don't include build as this will bundle config secrets
-#/build
+/build
 
 # misc
 .DS_Store
