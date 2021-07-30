@@ -1,4 +1,4 @@
-# Grainstore new change
+# Grainstore
 
 AWS Serverless Infrastructure repo for Grainstore Application Components:
 
